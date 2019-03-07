@@ -7,8 +7,8 @@ app.set('superSecret', config.secret);
 
 exports.get = (req, res) => {
     var nick = new User({ 
-        name: 'Jao', 
-        password: 'baga',
+        name: req.query.name, 
+        password: req.query.password,
         admin: true 
     });
     

@@ -14,14 +14,14 @@ router.get('/setup', controller.get);
 //Auth com JWT
 router.post('/authenticate',controllerJWT.post)
 
-router.use(function(req, res){
+router.use(function(req, res, next){
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
     if(token){
         jwt.verify(token, app.get('superSecret'), function(err, decoded){
             if(err){
                 return res.json({sucess: false, message: 'Falha na autenticacao do token'})
-
+            }else{
                 req.decoded = decoded
                 next()
             }
@@ -37,5 +37,6 @@ router.use(function(req, res){
 router.get('/',controller.getStatus)
 router.get('/users', controller.getUsers)
 
-
 module.exports = router;
+
+
