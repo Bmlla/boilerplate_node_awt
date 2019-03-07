@@ -1,14 +1,26 @@
 const User = require('../models/user')
 const express = require(`express`);
 const app = express();
-
 var config = require('../config');
 app.set('superSecret', config.secret);
 
+const crypto = require("crypto");
+
+const DADOS_CRIPTOGRAFAR = {
+    algoritmo : "aes256",
+    segredo : "usuarios",
+    tipo : "hex"
+};
+
+const cipher = crypto.createCipher(DADOS_CRIPTOGRAFAR.algoritmo, DADOS_CRIPTOGRAFAR.segredo);
+
 exports.get = (req, res) => {
+    cipher.update(req.query.password)
+    var senhaCrypto = cipher.final(DADOS_CRIPTOGRAFAR.tipo)
+
     var nick = new User({ 
         name: req.query.name, 
-        password: req.query.password,
+        password: senhaCrypto,
         admin: true 
     });
     

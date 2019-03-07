@@ -2,9 +2,21 @@ const User = require('../models/user')
 const jwt    = require('jsonwebtoken');
 const express = require(`express`);
 const app = express();
-
+const crypto = require("crypto");
 var config = require('../config');
 app.set('superSecret', config.secret);
+
+const DADOS_CRIPTOGRAFAR = {
+    algoritmo : "aes256",
+    codificacao : "utf8",
+    segredo : "usuarios",
+    tipo : "hex"
+};
+
+
+const decipher = crypto.createDecipher(DADOS_CRIPTOGRAFAR.algoritmo, DADOS_CRIPTOGRAFAR.segredo);
+
+
 
 exports.post = (req, res) => {
     User.findOne({
@@ -20,7 +32,10 @@ exports.post = (req, res) => {
         }else if (user){
 
             //Verifica se a senha bate
-            if (user.password != req.body.password) {
+            decipher.update(user.password, DADOS_CRIPTOGRAFAR.tipo);
+            var senhaUncrypto = decipher.final()
+
+            if (senhaUncrypto != req.body.password) {
                 res.json({ success: false, message: 'Falha na autenticacao. Senha invalida.' });
             }else{
 
