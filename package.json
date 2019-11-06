@@ -2,7 +2,7 @@
   "name": "node_boilerplate",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./bin/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon ./bin/server.js"
@@ -13,6 +13,8 @@
   "dependencies": {
     "base-64": "^0.1.0",
     "body-parser": "^1.18.3",
+    "crypto": "^1.0.1",
+    "crypto-js": "^3.1.9-1",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.5.0",
     "mongoose": "^5.4.17",

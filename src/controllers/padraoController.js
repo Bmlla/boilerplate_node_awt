@@ -6,27 +6,28 @@ app.set('superSecret', config.secret);
 
 const crypto = require("crypto");
 
-const DADOS_CRIPTOGRAFAR = {
-    algoritmo : "aes256",
-    segredo : "usuarios",
-    tipo : "hex"
-};
-
-const cipher = crypto.createCipher(DADOS_CRIPTOGRAFAR.algoritmo, DADOS_CRIPTOGRAFAR.segredo);
-
 exports.get = (req, res) => {
+    const DADOS_CRIPTOGRAFAR = {
+        algoritmo: "aes256",
+        segredo: "usuarios",
+        tipo: "hex"
+    };
+
+    const cipher = crypto.createCipher(DADOS_CRIPTOGRAFAR.algoritmo, DADOS_CRIPTOGRAFAR.segredo);
+
     cipher.update(req.query.password)
+
     var senhaCrypto = cipher.final(DADOS_CRIPTOGRAFAR.tipo)
 
-    var nick = new User({ 
-        name: req.query.name, 
+    var nick = new User({
+        name: req.query.name,
         password: senhaCrypto,
-        admin: true 
+        admin: true
     });
-    
-    nick.save(function(err) {
+
+    nick.save(function (err) {
         if (err) throw err;
-    
+
         console.log('User saved successfully');
         res.json({ success: true });
     });
@@ -36,7 +37,7 @@ exports.get = (req, res) => {
 
 
 exports.getUsers = (req, res) => {
-    User.find({},function(err, req){
+    User.find({}, function (err, req) {
         res.json(req)
     })
 }
